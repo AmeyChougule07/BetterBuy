@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "BetterBuy",
+  "short_name": "BetterBuy",
+  "version": "1.0.0",
+  "description": "Discover better alternatives to products using reviews, ratings, and customer sentiment.",
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+
+  "host_permissions": [
+    "https://www.amazon.in/*",
+    "https://www.amazon.com/*"
+  ],
+
+  "action": {
+    "default_title": "BetterBuy"
+  },
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amazon.in/*",
+        "https://www.amazon.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ]
+}
