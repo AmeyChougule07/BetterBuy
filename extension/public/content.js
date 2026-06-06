@@ -84,7 +84,7 @@ function isLaptopCard(text) {
 // =========================
 
 const CPU_REGEX =
-  /(Intel\s+Core\s+Ultra\s+\d+\s*(Processor)?\s*[A-Z0-9-]*|Intel\s+Core\s+[3579]\s*[A-Z0-9-]*|Intel\s+Core\s+i[3579][-A-Z0-9]*|Core\s+i[3579][-A-Z0-9]*|Intel\s+Processor\s+[A-Z0-9]+|Ryzen\s+AI\s+[A-Z0-9\s+-]+|Ryzen\s+[3579]\s*[A-Z0-9-]+|Athlon\s+Silver\s+\d+[A-Z]*|Athlon\s+Gold\s+\d+[A-Z]*|Celeron\s+[A-Z0-9]+|Snapdragon\s+X\s*[A-Z0-9-]*|Apple\s+M[1-9])/i;
+  /(Intel\s+Core\s+Ultra\s+\d+\s*[A-Z0-9-]*|Intel\s+Core\s+i[3579]-?\d+[A-Z]*|Core\s+i[3579]-?\d+[A-Z]*|Ryzen\s+\d+\s+\d+[A-Z]*|Ryzen\s+AI\s+[A-Z0-9+\s-]+|Athlon\s+Silver\s+\d+[A-Z]*|Athlon\s+Gold\s+\d+[A-Z]*|Celeron\s+[A-Z0-9]+|Snapdragon\s+X[\sA-Z0-9]*|Apple\s+M[1-9])/i
 
 // =========================
 // CURRENT PRODUCT
@@ -150,7 +150,7 @@ const currentCpu =
 
 const currentRam =
   currentText.match(
-    /(\d+)\s*GB\s*(RAM|LPDDR|DDR)/i
+    /(\d+)\s*GB/i
   );
 
 const currentStorage =
@@ -217,7 +217,7 @@ console.log(
 
 const cards = [
   ...document.querySelectorAll(
-    "li.a-carousel-card"
+    "li.a-carousel-card, .p13n-sc-uncoverable-faceout, [data-asin]"
   )
 ];
 
@@ -298,10 +298,10 @@ const competitorProducts =
 
         ram:
           text.match(
-            /(\d+)\s*GB\s*(RAM|LPDDR|DDR)/i
+            /(\d+)\s*GB/i
           )
             ? `${text.match(
-                /(\d+)\s*GB\s*(RAM|LPDDR|DDR)/i
+                /(\d+)\s*GB/i
               )[1]}GB`
             : null,
 
@@ -322,7 +322,7 @@ const competitorProducts =
       };
 
     })
-
+    .filter(Boolean)
     .filter(product =>
       isLaptopCard(
         product.name
@@ -360,25 +360,52 @@ console.log(
   uniqueCompetitorProducts[0]
 );
 
-// =========================
-// SEND TO BACKEND
-// =========================
-
-chrome.runtime.sendMessage(
-  {
-    type:
-      "GET_RECOMMENDATIONS",
-
-    productData,
-
-    competitorProducts:
-      uniqueCompetitorProducts
-  },
-
-  response => {
-    console.log(
-      "Backend Response:",
-      response
-    );
-  }
+//Temporary
+console.log(
+  "SENDING PRODUCT DATA:"
 );
+
+console.log(
+  JSON.stringify(
+    productData,
+    null,
+    2
+  )
+);
+
+if (
+  !productData.title ||
+  !productData.cpu ||
+  !productData.ram ||
+  !productData.storage
+) {
+
+  console.log(
+    "Skipping request - incomplete product data",
+    productData
+  );
+
+} else {
+
+  chrome.runtime.sendMessage(
+    {
+      type:
+        "GET_RECOMMENDATIONS",
+
+      productData,
+
+      competitorProducts:
+        uniqueCompetitorProducts
+    },
+
+    response => {
+
+      console.log(
+        "Backend Response:",
+        response
+      );
+
+    }
+  );
+
+}

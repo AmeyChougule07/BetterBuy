@@ -8,6 +8,49 @@ chrome.runtime.onMessage.addListener(
       "GET_RECOMMENDATIONS"
     ) {
 
+      // =========================
+      // DEBUG LOGGING
+      // =========================
+
+      console.log(
+        "===== BACKGROUND RECEIVED ====="
+      );
+
+      console.log(
+        JSON.stringify(
+          message.productData,
+          null,
+          2
+        )
+      );
+
+      console.log(
+        "Competitors Count:",
+        message.competitorProducts?.length || 0
+      );
+
+      // =========================
+      // VALIDATION
+      // =========================
+
+      if (
+        !message.productData ||
+        !message.productData.title
+      ) {
+
+        console.error(
+          "Invalid product data received from content script"
+        );
+
+        sendResponse({
+          success: false,
+          error:
+            "Missing product title"
+        });
+
+        return true;
+      }
+
       fetch(
         "http://localhost:5000/api/recommendations",
         {
