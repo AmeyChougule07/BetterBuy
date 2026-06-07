@@ -182,3 +182,9 @@
     border-right-color: var(--border);
   }
 }
+
+.popup-container {
+  width: 420px;
+  max-height: 600px;
+  overflow-y: auto;
+}

@@ -373,6 +373,11 @@ console.log(
   )
 );
 
+
+// =========================
+// Backend response
+// =========================
+
 if (
   !productData.title ||
   !productData.cpu ||
@@ -388,24 +393,37 @@ if (
 } else {
 
   chrome.runtime.sendMessage(
-    {
-      type:
-        "GET_RECOMMENDATIONS",
+  {
+    type: "GET_RECOMMENDATIONS",
+    productData,
+    competitorProducts:
+      uniqueCompetitorProducts
+  },
 
-      productData,
+  response => {
 
-      competitorProducts:
-        uniqueCompetitorProducts
-    },
+    console.log(
+      "Backend Response:",
+      response
+    );
 
-    response => {
+    if (
+      response &&
+      response.success
+    ) {
 
-      console.log(
-        "Backend Response:",
-        response
-      );
+      chrome.storage.local.set({
+        recommendations:
+          response.recommendations,
+
+        currentProduct:
+          productData
+      });
 
     }
-  );
+
+  }
+);
 
 }
+
