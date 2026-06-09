@@ -82,10 +82,8 @@ function isLaptopCard(text) {
 // =========================
 // CPU REGEX
 // =========================
-
 const CPU_REGEX =
-  /(Intel\s+Core\s+Ultra\s+\d+\s*[A-Z0-9-]*|Intel\s+Core\s+i[3579]-?\d+[A-Z]*|Core\s+i[3579]-?\d+[A-Z]*|Ryzen\s+\d+\s+\d+[A-Z]*|Ryzen\s+AI\s+[A-Z0-9+\s-]+|Athlon\s+Silver\s+\d+[A-Z]*|Athlon\s+Gold\s+\d+[A-Z]*|Celeron\s+[A-Z0-9]+|Snapdragon\s+X[\sA-Z0-9]*|Apple\s+M[1-9])/i
-
+  /(Intel\s+Core\s+Ultra\s+\d+\s*[A-Z0-9-]*|Intel\s+Core\s+i[3579]-?\d+[A-Z]*|Intel\s+Core\s+[3579]\s+\d+[A-Z]*|Core\s+i[3579]-?\d+[A-Z]*|Core\s+[3579]\s+\d+[A-Z]*|Ryzen\s+\d+\s+\d+[A-Z]*|Ryzen\s+AI\s+[A-Z0-9+\s-]+|Athlon\s+Silver\s+\d+[A-Z]*|Athlon\s+Gold\s+\d+[A-Z]*|Celeron\s+[A-Z0-9]+|Snapdragon\s+X[\sA-Z0-9]*|Apple\s+M[1-9])/i;
 // =========================
 // CURRENT PRODUCT
 // =========================
@@ -272,8 +270,34 @@ const competitorProducts =
             line.length > 20
         ) || "";
 
+      const linkElement =
+        card.querySelector(
+          "a[href*='/dp/']"
+        ) ||
+
+        card.querySelector(
+          "a[href*='/gp/product/']"
+        );
+
+      const productLink =
+        linkElement
+          ? new URL(
+              linkElement.getAttribute(
+                "href"
+              ),
+              location.origin
+            ).href
+          : null;
+
+      console.log(
+        "PRODUCT URL:",
+        productLink
+      );
+
       return {
         name,
+
+        url: productLink,
 
         brand:
           detectBrand(name),
@@ -353,6 +377,14 @@ console.log(
 console.log(
   "Unique Products:",
   uniqueCompetitorProducts.length
+);
+console.table(
+  uniqueCompetitorProducts.map(
+    product => ({
+      name: product.name,
+      url: product.url
+    })
+  )
 );
 
 console.log(

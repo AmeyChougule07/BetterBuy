@@ -84,6 +84,131 @@ function getGpuScore(gpu) {
   return 25;
 }
 
+function generateReasons(
+  currentProduct,
+  product
+) {
+
+  const reasons = [];
+
+  // CPU
+
+  if (
+    getCpuScore(product.cpu) >
+    getCpuScore(currentProduct.cpu)
+  ) {
+
+    reasons.push(
+      `Better CPU (${product.cpu})`
+    );
+
+  }
+
+  // GPU
+
+  if (
+    getGpuScore(product.gpu) >
+    getGpuScore(currentProduct.gpu)
+  ) {
+
+    reasons.push(
+      `Better GPU (${product.gpu})`
+    );
+
+  }
+
+  // RAM
+
+  if (
+    getRamScore(product.ram) >
+    getRamScore(currentProduct.ram)
+  ) {
+
+    reasons.push(
+      `${product.ram} RAM`
+    );
+
+  }
+
+  // Storage
+
+  if (
+    getStorageScore(product.storage) >
+    getStorageScore(currentProduct.storage)
+  ) {
+
+    reasons.push(
+      `${product.storage} Storage`
+    );
+
+  }
+
+  // Price
+
+  const currentPrice =
+    Number(
+      currentProduct.price
+        ?.replace(/[₹,]/g, "")
+    ) || 0;
+
+  const competitorPrice =
+    Number(
+      product.price
+        ?.replace(/[₹,]/g, "")
+    ) || 0;
+
+  if (
+    competitorPrice > 0 &&
+    competitorPrice < currentPrice
+  ) {
+
+    const savings =
+      currentPrice -
+      competitorPrice;
+
+    reasons.push(
+      `₹${savings.toLocaleString()} cheaper`
+    );
+
+  }
+
+  // Rating
+
+  const currentRating =
+    parseFloat(
+      currentProduct.rating
+    ) || 0;
+
+  const competitorRating =
+    parseFloat(
+      product.rating
+    ) || 0;
+
+  if (
+    competitorRating >
+    currentRating
+  ) {
+
+    reasons.push(
+      `Higher Rating (${competitorRating}★)`
+    );
+
+  }
+
+  if (
+    reasons.length === 0
+  ) {
+
+    reasons.push(
+      "Similar Specifications"
+    );
+
+  }
+
+  return reasons;
+
+}
+
 function getRamScore(ram) {
 
   if (!ram) return 0;
@@ -640,7 +765,13 @@ const rankProducts = (
 
           storageDifference,
 
-          gpuDifference
+          gpuDifference,
+
+          reasons:
+            generateReasons(
+              productData,
+              product
+            )
 
         };
 
