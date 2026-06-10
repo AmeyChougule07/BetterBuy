@@ -4,6 +4,15 @@ function getCpuScore(cpu) {
 
   cpu = cpu.toLowerCase();
 
+  if (cpu.includes("ultra 5 225h"))
+  return 105;
+
+  if (cpu.includes("ultra 5 125h"))
+    return 100;
+
+  if (cpu.includes("ultra 5 125u"))
+    return 85;
+
   // Intel Core Ultra
   if (cpu.includes("ultra 9")) return 115;
   if (cpu.includes("ultra 7")) return 105;
@@ -26,10 +35,19 @@ function getCpuScore(cpu) {
     cpu.includes("i5-12")
   ) return 70;
 
+
   // Ryzen
   if (cpu.includes("ryzen 7")) return 85;
   if (cpu.includes("ryzen 5")) return 65;
   if (cpu.includes("ryzen 3")) return 40;
+  if (cpu.includes("ryzen 7 8845hs"))
+    return 110;
+
+  if (cpu.includes("ryzen 7 7735hs"))
+    return 95;
+
+  if (cpu.includes("ryzen 5 7535hs"))
+    return 85;
 
   // Older Intel
   if (cpu.includes("i7")) return 80;
@@ -247,6 +265,198 @@ function getStorageScore(storage) {
   return 20;
 }
 
+function getDisplayScore(name) {
+
+  if (!name) return 0;
+
+  const text =
+    name.toLowerCase();
+
+  let score = 40;
+
+  // ==================
+  // PANEL TYPE
+  // ==================
+
+  if (
+    text.includes("amoled")
+  ) {
+    score += 60;
+  }
+  else if (
+    text.includes("oled")
+  ) {
+    score += 55;
+  }
+  else if (
+    text.includes("mini led")
+  ) {
+    score += 50;
+  }
+  else if (
+    text.includes("ips")
+  ) {
+    score += 30;
+  }
+  else if (
+    text.includes("va")
+  ) {
+    score += 25;
+  }
+  else if (
+    text.includes("tn")
+  ) {
+    score += 5;
+  }
+
+  // ==================
+  // RESOLUTION
+  // ==================
+
+  if (
+    text.includes("4k")
+  ) {
+    score += 35;
+  }
+  else if (
+    text.includes("3k")
+  ) {
+    score += 30;
+  }
+  else if (
+    text.includes("2.8k")
+  ) {
+    score += 28;
+  }
+  else if (
+    text.includes("2.5k")
+  ) {
+    score += 25;
+  }
+  else if (
+    text.includes("wqxga")
+  ) {
+    score += 22;
+  }
+  else if (
+    text.includes("wquxga")
+  ) {
+    score += 25;
+  }
+  else if (
+    text.includes("fhd")
+  ) {
+    score += 10;
+  }
+  else if (
+    text.includes("hd")
+  ) {
+    score += 2;
+  }
+
+  // ==================
+  // REFRESH RATE
+  // ==================
+
+  if (
+    text.includes("240hz")
+  ) {
+    score += 35;
+  }
+  else if (
+    text.includes("165hz")
+  ) {
+    score += 28;
+  }
+  else if (
+    text.includes("144hz")
+  ) {
+    score += 25;
+  }
+  else if (
+    text.includes("120hz")
+  ) {
+    score += 20;
+  }
+  else if (
+    text.includes("90hz")
+  ) {
+    score += 10;
+  }
+  else if (
+    text.includes("60hz")
+  ) {
+    score += 0;
+  }
+
+  // ==================
+  // BRIGHTNESS
+  // ==================
+
+  if (
+    text.includes("1000 nits")
+  ) {
+    score += 25;
+  }
+  else if (
+    text.includes("600 nits")
+  ) {
+    score += 20;
+  }
+  else if (
+    text.includes("500 nits")
+  ) {
+    score += 15;
+  }
+  else if (
+    text.includes("400 nits")
+  ) {
+    score += 10;
+  }
+  else if (
+    text.includes("300 nits")
+  ) {
+    score += 5;
+  }
+
+  // ==================
+  // SPECIAL FEATURES
+  // ==================
+
+  if (
+    text.includes("touchscreen")
+  ) {
+    score += 10;
+  }
+
+  if (
+    text.includes("touch screen")
+  ) {
+    score += 10;
+  }
+
+  if (
+    text.includes("anti-glare")
+  ) {
+    score += 5;
+  }
+
+  if (
+    text.includes("hdr")
+  ) {
+    score += 10;
+  }
+
+  if (
+    text.includes("dolby vision")
+  ) {
+    score += 15;
+  }
+
+  return score;
+
+}
+
 function detectCategory(product) {
 
   const text =
@@ -446,7 +656,7 @@ const rankProducts = (
             competitorCpu.includes("ryzen 7")
           ) {
 
-            score += 40;
+            score += 20;
 
           }
           else if (
@@ -470,7 +680,7 @@ const rankProducts = (
             competitorCpu.includes("ultra 5")
           ) {
 
-            score += 40;
+            score += 20;
 
           }
           else if (
@@ -569,7 +779,7 @@ const rankProducts = (
           score -= 10;
         }
         else {
-          score -= 10;
+          score -= 5;
         }
 
 
@@ -606,6 +816,27 @@ const rankProducts = (
         ) {
           score += competitorGpuScore / 2;
         }
+
+        // ===================
+        // DISPLAY
+        // ===================
+
+        const currentDisplayScore =
+          getDisplayScore(
+            productData.title
+          );
+
+        const competitorDisplayScore =
+          getDisplayScore(
+            product.name
+          );
+
+        const displayDifference =
+          competitorDisplayScore -
+          currentDisplayScore;
+
+        score += displayDifference / 3;
+
         
         // ===================
         // UPGRADE BONUS
@@ -629,7 +860,7 @@ const rankProducts = (
           competitorStorageScore >
           currentStorageScore
         ) {
-          score += 15;
+          score += 5;
         }
 
         // ===================
@@ -673,7 +904,7 @@ const rankProducts = (
           score += 30;
         }
 
-        
+
         // ===================
         // PRICE SCORING
         // ===================
@@ -681,44 +912,67 @@ const rankProducts = (
         const competitorPrice =
           Number(
             product.price
-              ?.replace(
-                /[₹,]/g,
-                ""
-              )
+              ?.replace(/[₹,]/g, "")
           ) || 0;
 
         const priceDifference =
-          Math.abs(
-            competitorPrice -
+          competitorPrice -
+          currentPrice;
+
+        const priceGapPercentage =
+          (
+            priceDifference /
             currentPrice
-          );
+          ) * 100;
+
+        // Price scoring
 
         if (
-          priceDifference <= 3000
-        ) {
-
-          score += 50;
-
-        }
-        else if (
-          priceDifference <= 7000
+          priceGapPercentage <= -20
         ) {
 
           score += 35;
 
         }
         else if (
-          priceDifference <= 12000
+          priceGapPercentage <= -10
         ) {
 
-          score += 20;
+          score += 25;
 
         }
-        else if (priceDifference <= 20000) {
+        else if (
+          priceGapPercentage <= 0
+        ) {
+
+          score += 15;
+
+        }
+        else if (
+          priceGapPercentage <= 10
+        ) {
+
+          score += 5;
+
+        }
+        else if (
+          priceGapPercentage <= 15
+        ) {
+
           score -= 20;
+
+        }
+        else if (
+          priceGapPercentage <= 25
+        ) {
+
+          score -= 50;
+
         }
         else {
-          score -= 100;
+
+          score -= 80;
+
         }
 
         // ===================
@@ -730,11 +984,36 @@ const rankProducts = (
           "number"
         ) {
 
-          score +=
-            product.rating *
-            2;
+          if (
+            product.rating >= 4.5
+          ) {
+
+            score += 20;
+
+          }
+          else if (
+            product.rating >= 4.2
+          ) {
+
+            score += 10;
+
+          }
+          else if (
+            product.rating >= 4.0
+          ) {
+
+            score += 0;
+
+          }
+          else {
+
+            score -= 15;
+
+          }
 
         }
+
+
         let missingSpecs = 0;
 
         if (!product.cpu) {
@@ -750,6 +1029,44 @@ const rankProducts = (
         }
 
         score -= missingSpecs * 20;
+
+        let downgradeCount = 0;
+
+        if (
+          competitorCpuScore <
+          currentCpuScore
+        ) {
+          downgradeCount++;
+        }
+
+        if (
+          competitorRamScore <
+          currentRamScore
+        ) {
+          downgradeCount++;
+        }
+
+        if (
+          competitorStorageScore <
+          currentStorageScore
+        ) {
+          downgradeCount++;
+        }
+
+        if (
+          competitorGpuScore <
+          currentGpuScore
+        ) {
+          downgradeCount++;
+        }
+
+        if (
+          downgradeCount >= 2
+        ) {
+
+          score -= 100;
+
+        }
 
         return {
 

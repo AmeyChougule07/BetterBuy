@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 function App() {
 
 const [
+  loading,
+  setLoading
+] = useState(true);
+
+const [
 recommendations,
 setRecommendations
 ] = useState([]);
@@ -30,6 +35,8 @@ chrome.storage.local.get(
       result.currentProduct || null
     );
 
+    setLoading(false);
+
   }
 );
 
@@ -37,7 +44,6 @@ chrome.storage.local.get(
 }, []);
 
 return (
-
 
 <div
   style={{
@@ -49,175 +55,207 @@ return (
 >
 
   <h1>🛒 BetterBuy</h1>
-  
 
-  {
-  currentProduct && (
+  {loading ? (
 
     <div
       style={{
-        border: "1px solid #4CAF50",
-        borderRadius: "8px",
-        padding: "12px",
-        marginBottom: "15px",
-        textAlign: "left"
+        textAlign: "left",
+        padding: "10px"
       }}
     >
-
-      <h3
-        style={{
-          marginTop: 0,
-          color: "#4CAF50"
-        }}
-      >
-        Current Product
+      <h3>
+        🔄 Analyzing Product...
       </h3>
 
       <p>
-        💰 {currentProduct.price}
+        • Extracting Specs
       </p>
 
       <p>
-        🧠 {currentProduct.cpu}
+        • Finding Alternatives
       </p>
 
       <p>
-        💾 {currentProduct.storage}
+        • Ranking Recommendations
       </p>
-
-
-      <p>
-        ⭐ {currentProduct.rating}
-      </p>
-
     </div>
 
-  )
-}
+  ) : (
 
-  {recommendations.map(
-    (product,index) => (
+    <>
 
-      <div
-        key={product.name}
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "12px",
-          marginBottom: "8px"
-        }}
-      >
-        {index === 0 && (
-          <div
-            style={{
-              background: "#FFD700",
-              color: "#000",
-              display: "inline-block",
-              padding: "4px 10px",
-              borderRadius: "20px",
-              fontWeight: "bold",
-              marginBottom: "8px"
-            }}
-          >
-            🥇 Best Match
-          </div>
-        )}
+      {currentProduct && (
 
-        {index === 1 && (
-          <div
-            style={{
-              background: "#C0C0C0",
-              color: "#000",
-              display: "inline-block",
-              padding: "4px 10px",
-              borderRadius: "20px",
-              fontWeight: "bold",
-              marginBottom: "8px"
-            }}
-          >
-            🥈 Runner Up
-          </div>
-        )}
-
-        {index === 2 && (
-          <div
-            style={{
-              background: "#CD7F32",
-              color: "#000",
-              display: "inline-block",
-              padding: "4px 10px",
-              borderRadius: "20px",
-              fontWeight: "bold",
-              marginBottom: "8px"
-            }}
-          >
-            🥉 Third Best
-          </div>
-        )}
-
-        <h3
+        <div
           style={{
-            textAlign: "left",
-            marginBottom: "12px"
+            border: "1px solid #4CAF50",
+            borderRadius: "8px",
+            padding: "12px",
+            marginBottom: "15px",
+            textAlign: "left"
           }}
         >
-          {product.name.slice(0, 70)}...
-        </h3>
 
-        <p style={{ textAlign: "left" }}>
-          💰 {product.price}
-        </p>
+          <h3
+            style={{
+              marginTop: 0,
+              color: "#4CAF50"
+            }}
+          >
+            🎯 Current Product
+          </h3>
 
-        <p style={{ textAlign: "left" }}>
-          🧠 {product.cpu}
-        </p>
+          <p>
+            💰 {currentProduct.price}
+          </p>
 
-        <p style={{ textAlign: "left" }}>
-          ⭐ {product.rating ?? "No rating available"}
-        </p>
+          <p>
+            🧠 {currentProduct.cpu}
+          </p>
 
-        {product.reasons?.length > 0 && (
+          <p>
+            💾 {currentProduct.storage}
+          </p>
+
+          <p>
+            ⭐ {currentProduct.rating}
+          </p>
+
+        </div>
+
+      )}
+
+      {recommendations.map(
+        (product, index) => (
 
           <div
+            key={product.name}
             style={{
-              marginTop: "10px",
-              borderTop:
-                "1px solid #eee",
-              paddingTop: "8px"
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              padding: "12px",
+              marginBottom: "8px"
             }}
           >
 
-            <strong>
-              Why BetterBuy recommends this:
-            </strong>
+            {index === 0 && (
+              <div
+                style={{
+                  background: "#FFD700",
+                  color: "#000",
+                  display: "inline-block",
+                  padding: "4px 10px",
+                  borderRadius: "20px",
+                  fontWeight: "bold",
+                  marginBottom: "8px"
+                }}
+              >
+                🥇 Best Match
+              </div>
+            )}
 
-            {product.reasons.map(
-              reason => (
+            {index === 1 && (
+              <div
+                style={{
+                  background: "#C0C0C0",
+                  color: "#000",
+                  display: "inline-block",
+                  padding: "4px 10px",
+                  borderRadius: "20px",
+                  fontWeight: "bold",
+                  marginBottom: "8px"
+                }}
+              >
+                🥈 Runner Up
+              </div>
+            )}
 
-                <p
-                  key={reason}
-                  style={{
-                    color: "#4CAF50",
-                    margin: "4px 0"
-                  }}
-                >
-                  ✓ {reason}
-                </p>
+            {index === 2 && (
+              <div
+                style={{
+                  background: "#CD7F32",
+                  color: "#000",
+                  display: "inline-block",
+                  padding: "4px 10px",
+                  borderRadius: "20px",
+                  fontWeight: "bold",
+                  marginBottom: "8px"
+                }}
+              >
+                🥉 Third Best
+              </div>
+            )}
 
-              )
+            <h3
+              style={{
+                textAlign: "left",
+                marginBottom: "12px"
+              }}
+            >
+              {
+                product.name.length > 70
+                  ? `${product.name.slice(0, 70)}...`
+                  : product.name
+              }
+            </h3>
+
+            <p style={{ textAlign: "left" }}>
+              💰 {product.price}
+            </p>
+
+            <p style={{ textAlign: "left" }}>
+              🧠 {product.cpu}
+            </p>
+
+            <p style={{ textAlign: "left" }}>
+              ⭐ {product.rating ?? "No rating available"}
+            </p>
+
+            {product.reasons?.length > 0 && (
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  borderTop: "1px solid #eee",
+                  paddingTop: "8px"
+                }}
+              >
+
+                <strong>
+                  Why BetterBuy recommends this:
+                </strong>
+
+                {product.reasons.map(
+                  reason => (
+
+                    <p
+                      key={reason}
+                      style={{
+                        color: "#4CAF50",
+                        margin: "4px 0"
+                      }}
+                    >
+                      ✓ {reason}
+                    </p>
+
+                  )
+                )}
+
+              </div>
+
             )}
 
           </div>
 
-        )}
+        )
+      )}
 
-      </div>
+    </>
 
-    )
   )}
 
 </div>
-
 
 );
 
