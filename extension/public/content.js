@@ -225,6 +225,44 @@ console.log(
 );
 
 // =========================
+// PRODUCT FILTERING
+// =========================
+
+function isValidCompetitor(product) {
+
+  if (!product.name) return false;
+
+  if (!product.price) return false;
+
+  if (
+    product.name.length < 25
+  ) {
+    return false;
+  }
+
+  if (
+    !isLaptopCard(product.name)
+  ) {
+    return false;
+  }
+  if (
+    currentProduct.gpu &&
+    currentProduct.gpu.includes("RTX")
+  ) {
+
+    if (
+      !product.gpu ||
+      !product.gpu.includes("RTX")
+    ) {
+      return false;
+    }
+
+  }
+
+  return true;
+}
+
+// =========================
 // PRODUCT EXTRACTION
 // =========================
 
@@ -347,11 +385,7 @@ const competitorProducts =
 
     })
     .filter(Boolean)
-    .filter(product =>
-      isLaptopCard(
-        product.name
-      )
-    );
+    .filter(isValidCompetitor);
 
 // =========================
 // REMOVE DUPLICATES

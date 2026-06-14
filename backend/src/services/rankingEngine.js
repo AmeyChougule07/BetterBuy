@@ -4,64 +4,199 @@ function getCpuScore(cpu) {
 
   cpu = cpu.toLowerCase();
 
+  // =========================
+  // APPLE SILICON
+  // =========================
+
+  if (cpu.includes("m4 max")) return 150;
+  if (cpu.includes("m4 pro")) return 140;
+  if (cpu.includes("m4")) return 130;
+
+  if (cpu.includes("m3 max")) return 145;
+  if (cpu.includes("m3 pro")) return 135;
+  if (cpu.includes("m3")) return 125;
+
+  if (cpu.includes("m2 max")) return 140;
+  if (cpu.includes("m2 pro")) return 130;
+  if (cpu.includes("m2")) return 120;
+
+  if (cpu.includes("m1 max")) return 130;
+  if (cpu.includes("m1 pro")) return 120;
+  if (cpu.includes("m1")) return 110;
+
+  // =========================
+  // INTEL CORE ULTRA
+  // =========================
+
+  if (cpu.includes("ultra 9")) return 140;
+
+  if (
+    cpu.includes("ultra 7 265h") ||
+    cpu.includes("ultra 7 258v")
+  ) return 135;
+
+  if (cpu.includes("ultra 7"))
+    return 125;
+
   if (cpu.includes("ultra 5 225h"))
-  return 105;
+    return 120;
 
   if (cpu.includes("ultra 5 125h"))
-    return 100;
+    return 115;
 
-  if (cpu.includes("ultra 5 125u"))
-    return 85;
-
-  // Intel Core Ultra
-  if (cpu.includes("ultra 9")) return 115;
-  if (cpu.includes("ultra 7")) return 105;
-  if (cpu.includes("ultra 5")) return 95;
-
-  // Apple
-  if (cpu.includes("m4")) return 110;
-  if (cpu.includes("m3")) return 100;
-
-  // Newer Intel generations
-  if (
-    cpu.includes("i7-14") ||
-    cpu.includes("i7-13") ||
-    cpu.includes("i7-12")
-  ) return 90;
-
-  if (
-    cpu.includes("i5-14") ||
-    cpu.includes("i5-13") ||
-    cpu.includes("i5-12")
-  ) return 70;
-
-
-  // Ryzen
-  if (cpu.includes("ryzen 7")) return 85;
-  if (cpu.includes("ryzen 5")) return 65;
-  if (cpu.includes("ryzen 3")) return 40;
-  if (cpu.includes("ryzen 7 8845hs"))
+  if (cpu.includes("ultra 5"))
     return 110;
 
+  // =========================
+  // AMD RYZEN AI
+  // =========================
+
+  if (cpu.includes("ryzen ai 9"))
+    return 140;
+
+  if (cpu.includes("ryzen ai 7"))
+    return 130;
+
+  if (cpu.includes("ryzen ai 5"))
+    return 120;
+
+  // =========================
+  // HIGH-END RYZEN
+  // =========================
+
+  if (cpu.includes("ryzen 9"))
+    return 130;
+
+  if (cpu.includes("ryzen 7 8845hs"))
+    return 120;
+
+  if (cpu.includes("ryzen 7 8840hs"))
+    return 118;
+
+  if (cpu.includes("ryzen 7 7840hs"))
+    return 115;
+
   if (cpu.includes("ryzen 7 7735hs"))
-    return 95;
+    return 105;
+
+  if (cpu.includes("ryzen 5 8645hs"))
+    return 105;
+
+  if (cpu.includes("ryzen 5 7640hs"))
+    return 100;
 
   if (cpu.includes("ryzen 5 7535hs"))
-    return 85;
+    return 95;
 
-  // Older Intel
-  if (cpu.includes("i7")) return 80;
-  if (cpu.includes("i5")) return 60;
-  if (cpu.includes("i3")) return 35;
+  // Generic Ryzen
 
-  // Budget
-  if (cpu.includes("athlon")) return 20;
-  if (cpu.includes("celeron")) return 10;
+  if (cpu.includes("ryzen 7"))
+    return 95;
 
-  // Snapdragon
-  if (cpu.includes("snapdragon")) return 95;
+  if (cpu.includes("ryzen 5"))
+    return 80;
 
-  return 30;
+  if (cpu.includes("ryzen 3"))
+    return 55;
+
+  // =========================
+  // INTEL 14TH GEN
+  // =========================
+
+  if (
+    cpu.includes("i9-14")
+  ) return 125;
+
+  if (
+    cpu.includes("i7-14")
+  ) return 110;
+
+  if (
+    cpu.includes("i5-14")
+  ) return 95;
+
+  // =========================
+  // INTEL 13TH GEN
+  // =========================
+
+  if (
+    cpu.includes("i9-13")
+  ) return 120;
+
+  if (
+    cpu.includes("i7-13")
+  ) return 105;
+
+  if (
+    cpu.includes("i5-13")
+  ) return 90;
+
+  // =========================
+  // INTEL 12TH GEN
+  // =========================
+
+  if (
+    cpu.includes("i9-12")
+  ) return 115;
+
+  if (
+    cpu.includes("i7-12")
+  ) return 100;
+
+  if (
+    cpu.includes("i5-12")
+  ) return 85;
+
+  // =========================
+  // OLDER INTEL
+  // =========================
+
+  if (cpu.includes("i9"))
+    return 105;
+
+  if (cpu.includes("i7"))
+    return 90;
+
+  if (cpu.includes("i5"))
+    return 75;
+
+  if (cpu.includes("i3"))
+    return 50;
+
+  // =========================
+  // QUALCOMM
+  // =========================
+
+  if (
+    cpu.includes("snapdragon x elite")
+  ) return 130;
+
+  if (
+    cpu.includes("snapdragon x plus")
+  ) return 120;
+
+  if (
+    cpu.includes("snapdragon")
+  ) return 100;
+
+  // =========================
+  // ENTRY LEVEL
+  // =========================
+
+  if (
+    cpu.includes("athlon")
+  ) return 30;
+
+  if (
+    cpu.includes("pentium")
+  ) return 20;
+
+  if (
+    cpu.includes("celeron")
+  ) return 10;
+
+  return 40;
+
 }
 
 function getGpuScore(gpu) {
